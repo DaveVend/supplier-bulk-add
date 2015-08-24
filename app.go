@@ -1,10 +1,5 @@
-/*
-Used to create a large number of suppliers at once, given no import feature in Vend.
-Takes a CSV file input, then creates each supplier with a POST to the /api/supplier endpoint.
-
-Example usage:
-./supplier-bulk-add -d honestmulch -t ACQLc2NH7U0kw0yp13U1ZjQKMA5G4XUyJoHrczFn -f ~/Desktop/supplier_list.csv
-*/
+// Used to create a large number of suppliers at once, given no import feature in Vend.
+// Takes a CSV file input, then creates each supplier with a POST to the /api/supplier endpoint.
 package main
 
 import (
@@ -48,13 +43,15 @@ func main() {
 		domainPrefix = domainPrefix[:len(domainPrefix)-11]
 	}
 
+	// Read supplier list from CSV file.
 	supplierList, err := readSupplierCSV(filePath)
 	if err != nil {
-		log.Printf("Something went wrong trying to read supplier CSV: %s", err)
+		log.Fatalf("Something went wrong trying to read supplier CSV: %s", err)
 	}
+	// Post all suppliers to Vend.
 	err = postAllSuppliers(supplierList, domainPrefix, authToken)
 	if err != nil {
-		log.Printf("Something went wrong trying to post suppliers: %s", err)
+		log.Fatalf("Something went wrong trying to post suppliers: %s", err)
 	}
 }
 
@@ -71,7 +68,7 @@ func readSupplierCSV(filePath string) ([]Supplier, error) {
 	// Open our provided CSV file.
 	csvFile, err := os.Open(filePath)
 	if err != nil {
-		log.Fatalf("Could not read from CSV file: %s", err)
+		log.Printf("Could not read from CSV file: %s", err)
 		return nil, err
 	}
 	// Make sure to close at end.
@@ -89,9 +86,9 @@ func readSupplierCSV(filePath string) ([]Supplier, error) {
 	// Check each header in the row is same as our template.
 	for i := range headerRow {
 		if headerRow[i] != exampleHeader[i] {
+			fmt.Println("Found error in header row. Check log!")
 			log.Fatalf("No header match for: %s, instead got: %s.",
 				string(exampleHeader[i]), string(headerRow[i]))
-			fmt.Println("Found error in header row. Check log!")
 		}
 	}
 
@@ -162,7 +159,7 @@ func createSupplierJSON(supplier Supplier) ([]byte, error) {
 	// Creates pretty JSON format of our supplier.
 	supplierJSON, err := json.MarshalIndent(supplier, "", "\t")
 	if err != nil {
-		log.Fatalf("Error marhsalling supplier JSON: %s", err)
+		log.Printf("Error marhsalling supplier JSON: %s", err)
 		return nil, err
 	}
 
@@ -180,7 +177,7 @@ func postSupplier(supplier []byte, domainPrefix, authToken string) error {
 	// Supplier endpoint 0.X takes a POST request for supplier creation.
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(supplier))
 	if err != nil {
-		log.Fatalf("Error creating request: %s", err)
+		log.Printf("Error creating request: %s", err)
 		return err
 	}
 
@@ -193,18 +190,9 @@ func postSupplier(supplier []byte, domainPrefix, authToken string) error {
 	// Perform request.
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Error making request to post supplier: %s", err)
+		log.Printf("Error making request to post supplier: %s", err)
 		return err
 	}
-
-	// NOTE:
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalf("Error while reading response body: %s\n", err)
-		return err
-	}
-	fmt.Printf("\n\nGot response:\n")
-	os.Stdout.Write(body)
 
 	// Check HTTP response status codes, return error if code is unexpected.
 	switch resp.StatusCode {
@@ -219,9 +207,17 @@ func postSupplier(supplier []byte, domainPrefix, authToken string) error {
 	case 429:
 		log.Printf("Our rates have been limited - sit tight. Status: %d", resp.StatusCode)
 	default:
-		log.Fatalf("Got an unknown status code - Google it. Status: %d", resp.StatusCode)
+		log.Printf("Got an unknown status code - Google it. Status: %d", resp.StatusCode)
 		return err
 	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Error while reading response body: %s\n", err)
+		return err
+	}
+	fmt.Printf("\n\nGot response:\n")
+	os.Stdout.Write(body)
 
 	return err
 }

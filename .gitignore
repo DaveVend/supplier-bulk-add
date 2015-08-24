@@ -5,3 +5,5 @@ supsup
 *.csv
 *.txt
 *.json
+
+supplier_template.csv
