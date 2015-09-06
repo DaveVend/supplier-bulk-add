@@ -1,4 +1,4 @@
-# Supsup
+# Supplier Bulk Add
 
 Bulk add suppliers to Vend from a CSV file.
 
