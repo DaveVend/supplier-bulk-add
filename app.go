@@ -70,7 +70,7 @@ func readSupplierCSV(filePath string) ([]Supplier, error) {
 	csvFile, err := os.Open(filePath)
 	if err != nil {
 		log.Printf("Could not read from CSV file: %s", err)
-		return nil, err
+		os.Exit(1)
 	}
 	// Make sure to close at end.
 	defer csvFile.Close()
@@ -98,7 +98,6 @@ func readSupplierCSV(filePath string) ([]Supplier, error) {
 
 	// Loop through rows and assign them to supplier type.
 	for _, row := range rawData {
-
 		supplier.Name = &row[0]
 		supplier.Description = &row[1]
 		supplier.Contact.FirstName = &row[2]
@@ -143,7 +142,7 @@ func postAllSuppliers(supplierList []Supplier, domainPrefix, authToken string) e
 			log.Printf("Something went wrong trying to create supplier JSON: %s", err)
 		}
 
-		fmt.Printf("\n\nPosting body:\n %s", string(supplierJSON))
+		fmt.Printf("\nSENDING:\n %s", string(supplierJSON))
 
 		err = postSupplier(supplierJSON, domainPrefix, authToken)
 		if err != nil {
@@ -170,8 +169,6 @@ func createSupplierJSON(supplier Supplier) ([]byte, error) {
 // Posts supplier JSON payload to supplier endpoint which creates supplier.
 func postSupplier(supplier []byte, domainPrefix, authToken string) error {
 
-	client := &http.Client{}
-
 	url := fmt.Sprintf("https://%s.vendhq.com/api/supplier", domainPrefix)
 	log.Printf("Posting supplier to endpoint: %s", url)
 
@@ -183,13 +180,13 @@ func postSupplier(supplier []byte, domainPrefix, authToken string) error {
 	}
 
 	// Set request headers.
-	// Auth token is created in Vend -> Setup -> API Access.
+	// Personal Auth token is created in Vend -> Setup -> API Access.
 	req.Header.Set("Content-type", "application/json")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", authToken))
 	req.Header.Set("User-Agent", "Support-tool: supplier-bulk-add - one of JOEYM8's tools.")
 
 	// Perform request.
-	resp, err := client.Do(req)
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		log.Printf("Error making request to post supplier: %s", err)
 		return err
@@ -217,7 +214,7 @@ func postSupplier(supplier []byte, domainPrefix, authToken string) error {
 		log.Printf("Error while reading response body: %s\n", err)
 		return err
 	}
-	fmt.Printf("\n\nGot response:\n")
+	fmt.Printf("\n\nRESPONSE:\n")
 	os.Stdout.Write(body)
 
 	return err

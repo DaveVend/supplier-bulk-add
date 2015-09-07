@@ -38,9 +38,9 @@ package main
 
 // Supplier contains basic supplier info, with contact details nested.
 type Supplier struct {
-	Name        *string  `json:"name,omitempty"`
-	Description *string  `json:"description,omitempty"`
-	Contact     *Contact `json:"contact,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Contact     Contact `json:"contact,omitempty"`
 }
 
 // Contact contains the supplier's specific contact info from the vend_contact table.
