@@ -1,7 +1,7 @@
 .DS_Store
 .~lock.*
 
-suplier-bulk-add
+supplier-bulk-add
 supplier_template.csv
 
 *.csv
