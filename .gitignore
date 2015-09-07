@@ -1,9 +1,9 @@
 .DS_Store
 
 suplier-bulk-add
+supplier_template.csv
 
 *.csv
 *.txt
 *.json
-
-supplier_template.csv
+*.log

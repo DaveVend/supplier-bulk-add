@@ -1,8 +1,8 @@
 /*
-To create supplier via HTTP POST to endpoint:
-/api/supplier
+ENDPOINT:
+vendhq.com/api/supplier
 
-Example payload:
+EXAMPLE PAYLOAD:
 {
   "name": "Name",
   "description": "Description",
@@ -34,39 +34,38 @@ Example payload:
 }
 */
 
-// Package types contains various structs.
 package main
 
 // Supplier contains basic supplier info, with contact details nested.
 type Supplier struct {
-	Name        string  `json:"name,omitempty"`
-	Description string  `json:"description,omitempty"`
-	Contact     Contact `json:"contact,omitempty"`
+	Name        *string  `json:"name,omitempty"`
+	Description *string  `json:"description,omitempty"`
+	Contact     *Contact `json:"contact,omitempty"`
 }
 
 // Contact contains the supplier's specific contact info from the vend_contact table.
 type Contact struct {
-	FirstName         string `json:"first_name,omitempty"`
-	LastName          string `json:"last_name,omitempty"`
-	CompanyName       string `json:"company_name,omitempty"`
-	Phone             string `json:"phone,omitempty"`
-	Mobile            string `json:"mobile,omitempty"`
-	Fax               string `json:"fax,omitempty"`
-	Email             string `json:"email,omitempty"`
-	Twitter           string `json:"twitter,omitempty"`
-	Website           string `json:"website,omitempty"`
-	PhysicalAddress1  string `json:"physical_address1,omitempty"`
-	PhysicalAddress2  string `json:"physical_address2,omitempty"`
-	PhysicalSuburb    string `json:"physical_suburb,omitempty"`
-	PhysicalCity      string `json:"physical_city,omitempty"`
-	PhysicalPostcode  string `json:"physicaL_postcode,omitempty"`
-	PhysicalState     string `json:"physical_state,omitempty"`
-	PhysicalCountryID string `json:"physical_country_id,omitempty"`
-	PostalAddress1    string `json:"postal_address1,omitempty"`
-	PostalAddress2    string `json:"postal_address2,omitempty"`
-	PostalSuburb      string `json:"postal_suburb,omitempty"`
-	PostalCity        string `json:"postal_city,omitempty"`
-	PostalPostcode    string `json:"postal_postcode,omitempty"`
-	PostalState       string `json:"postal_state,omitempty"`
-	PostalCountryID   string `json:"postal_country_id,omitempty"`
+	FirstName         *string `json:"first_name,omitempty"`
+	LastName          *string `json:"last_name,omitempty"`
+	CompanyName       *string `json:"company_name,omitempty"`
+	Phone             *string `json:"phone,omitempty"`
+	Mobile            *string `json:"mobile,omitempty"`
+	Fax               *string `json:"fax,omitempty"`
+	Email             *string `json:"email,omitempty"`
+	Twitter           *string `json:"twitter,omitempty"`
+	Website           *string `json:"website,omitempty"`
+	PhysicalAddress1  *string `json:"physical_address1,omitempty"`
+	PhysicalAddress2  *string `json:"physical_address2,omitempty"`
+	PhysicalSuburb    *string `json:"physical_suburb,omitempty"`
+	PhysicalCity      *string `json:"physical_city,omitempty"`
+	PhysicalPostcode  *string `json:"physicaL_postcode,omitempty"`
+	PhysicalState     *string `json:"physical_state,omitempty"`
+	PhysicalCountryID *string `json:"physical_country_id,omitempty"`
+	PostalAddress1    *string `json:"postal_address1,omitempty"`
+	PostalAddress2    *string `json:"postal_address2,omitempty"`
+	PostalSuburb      *string `json:"postal_suburb,omitempty"`
+	PostalCity        *string `json:"postal_city,omitempty"`
+	PostalPostcode    *string `json:"postal_postcode,omitempty"`
+	PostalState       *string `json:"postal_state,omitempty"`
+	PostalCountryID   *string `json:"postal_country_id,omitempty"`
 }

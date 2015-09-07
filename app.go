@@ -1,5 +1,7 @@
-// Used to create a large number of suppliers at once, given no import feature in Vend.
-// Takes a CSV file input, then creates each supplier with a POST to the /api/supplier endpoint.
+// Used to create a large number of suppliers at once, given there is
+// no import feature in Vend.
+// Takes a formatted CSV file input, then creates each supplier with a
+// POST to the /api/supplier endpoint.
 package main
 
 import (
@@ -29,7 +31,7 @@ func main() {
 
 	// Define command line flags.
 	var authToken, domainPrefix, filePath string
-	flag.StringVar(&authToken, "t", "", "Vend API token. (Vend -> Setup -> API Access)")
+	flag.StringVar(&authToken, "t", "", "Vend API token. (Setup -> API Access)")
 	flag.StringVar(&domainPrefix, "d", "", "Vend Store name (xxxx.vendhq.com)")
 	flag.StringVar(&filePath, "f", "", "Path to CSV file of suppliers.")
 	flag.Parse()
@@ -39,9 +41,8 @@ func main() {
 		authToken, domainPrefix, filePath)
 
 	// Save people who write domain_prefix.vendhq.com.
-	if strings.HasSuffix(domainPrefix, ".vendhq.com") {
-		domainPrefix = domainPrefix[:len(domainPrefix)-11]
-	}
+	parts := strings.Split(domainPrefix, ".")
+	domainPrefix = parts[0]
 
 	// Read supplier list from CSV file.
 	supplierList, err := readSupplierCSV(filePath)
@@ -98,31 +99,31 @@ func readSupplierCSV(filePath string) ([]Supplier, error) {
 	// Loop through rows and assign them to supplier type.
 	for _, row := range rawData {
 
-		supplier.Name = row[0]
-		supplier.Description = row[1]
-		supplier.Contact.FirstName = row[2]
-		supplier.Contact.LastName = row[3]
-		supplier.Contact.CompanyName = row[4]
-		supplier.Contact.Phone = row[5]
-		supplier.Contact.Mobile = row[6]
-		supplier.Contact.Fax = row[7]
-		supplier.Contact.Email = row[8]
-		supplier.Contact.Twitter = row[9]
-		supplier.Contact.Website = row[10]
-		supplier.Contact.PhysicalAddress1 = row[11]
-		supplier.Contact.PhysicalAddress2 = row[12]
-		supplier.Contact.PhysicalSuburb = row[13]
-		supplier.Contact.PhysicalCity = row[14]
-		supplier.Contact.PhysicalPostcode = row[15]
-		supplier.Contact.PhysicalState = row[16]
-		supplier.Contact.PhysicalCountryID = row[17]
-		supplier.Contact.PostalAddress1 = row[18]
-		supplier.Contact.PostalAddress2 = row[19]
-		supplier.Contact.PostalSuburb = row[20]
-		supplier.Contact.PostalCity = row[21]
-		supplier.Contact.PostalPostcode = row[22]
-		supplier.Contact.PostalState = row[23]
-		supplier.Contact.PostalCountryID = row[24]
+		supplier.Name = &row[0]
+		supplier.Description = &row[1]
+		supplier.Contact.FirstName = &row[2]
+		supplier.Contact.LastName = &row[3]
+		supplier.Contact.CompanyName = &row[4]
+		supplier.Contact.Phone = &row[5]
+		supplier.Contact.Mobile = &row[6]
+		supplier.Contact.Fax = &row[7]
+		supplier.Contact.Email = &row[8]
+		supplier.Contact.Twitter = &row[9]
+		supplier.Contact.Website = &row[10]
+		supplier.Contact.PhysicalAddress1 = &row[11]
+		supplier.Contact.PhysicalAddress2 = &row[12]
+		supplier.Contact.PhysicalSuburb = &row[13]
+		supplier.Contact.PhysicalCity = &row[14]
+		supplier.Contact.PhysicalPostcode = &row[15]
+		supplier.Contact.PhysicalState = &row[16]
+		supplier.Contact.PhysicalCountryID = &row[17]
+		supplier.Contact.PostalAddress1 = &row[18]
+		supplier.Contact.PostalAddress2 = &row[19]
+		supplier.Contact.PostalSuburb = &row[20]
+		supplier.Contact.PostalCity = &row[21]
+		supplier.Contact.PostalPostcode = &row[22]
+		supplier.Contact.PostalState = &row[23]
+		supplier.Contact.PostalCountryID = &row[24]
 
 		// Append each supplier type to our slice of all suppliers.
 		supplierList = append(supplierList, supplier)
