@@ -88,7 +88,7 @@ func readSupplierCSV(filePath string) ([]Supplier, error) {
 	for i := range headerRow {
 		if headerRow[i] != exampleHeader[i] {
 			fmt.Println("Found error in header row. Check log!")
-			log.Fatalf("No header match for: %s, instead got: %s.",
+			log.Fatalf("No header match for: %s Instead got: %s.",
 				string(exampleHeader[i]), string(headerRow[i]))
 		}
 	}
@@ -135,6 +135,8 @@ func readSupplierCSV(filePath string) ([]Supplier, error) {
 func postAllSuppliers(supplierList []Supplier, domainPrefix, authToken string) error {
 	var err error
 
+	fmt.Printf("\n%d suppliers to post! :)\n", len(supplierList))
+
 	for _, supplier := range supplierList {
 
 		supplierJSON, err := createSupplierJSON(supplier)
@@ -149,6 +151,8 @@ func postAllSuppliers(supplierList []Supplier, domainPrefix, authToken string) e
 			log.Printf("Something went wrong trying to post supplier: %s", err)
 		}
 	}
+
+	fmt.Println("\nFinished!")
 
 	return err
 }
