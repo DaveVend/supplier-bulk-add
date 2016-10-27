@@ -134,12 +134,11 @@ func readSupplierCSV(filePath string) ([]Supplier, error) {
 // Iterate through and post each supplier.
 func postAllSuppliers(supplierList []Supplier, domainPrefix, authToken string) error {
 	var err error
-
 	fmt.Printf("\n%d suppliers to post! :)\n", len(supplierList))
 
 	for _, supplier := range supplierList {
-
-		supplierJSON, err := createSupplierJSON(supplier)
+		var supplierJSON []byte
+		supplierJSON, err = createSupplierJSON(supplier)
 		if err != nil {
 			log.Printf("Something went wrong trying to create supplier JSON: %s", err)
 		}
@@ -205,7 +204,7 @@ func postSupplier(supplier []byte, domainPrefix, authToken string) error {
 		return err
 	case 404:
 		log.Printf("URL not found - check domain prefix. Status: %d", resp.StatusCode)
-		return err
+		panic(404)
 	case 429:
 		log.Printf("Our rates have been limited - sit tight. Status: %d", resp.StatusCode)
 	default:

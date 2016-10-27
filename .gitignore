@@ -4,6 +4,8 @@
 supplier-bulk-add
 supplier_template.csv
 
+old/*
+
 *.csv
 *.txt
 *.json
